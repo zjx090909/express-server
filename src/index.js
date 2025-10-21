@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -5,10 +7,10 @@ const mysql = require('mysql');
 const users = require('./users');
 
 const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'Liuyang1$',
-  database : 'residents'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 connection.connect();
@@ -22,4 +24,8 @@ const app = express()
 
 app.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
+});
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the Express Server!');
 });

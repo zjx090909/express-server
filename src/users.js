@@ -6,9 +6,11 @@ function createRouter(db) {
 
   // the routes are defined here
   router.post('/users', (req, res, next) => {
+    console.log('Received POST request with data:', req.body);
+
     db.query(
       'INSERT INTO users (firstname, lastname, email, province) VALUES (?,?,?,?)',
-      [firstname, req.body.lastname, req.body.email, req.body.province],
+      [req.body.firstname, req.body.lastname, req.body.email, req.body.province],
       (error) => {
         if (error) {
           console.error(error);
@@ -22,19 +24,23 @@ function createRouter(db) {
 
 
   router.get('/users', function (req, res, next) {
+    const page = parseInt(req.params.page, 10) || 0;  // 确保 page 是整数，默认为 0
+    const offset = 10 * page;  // 计算偏移量
+  
     db.query(
-      'SELECT id, lastname, email, province FROM users WHERE firstname=? ORDER BY province LIMIT 10 OFFSET ?',
-      [firstname, 10*(req.params.page || 0)],
+      'SELECT id, firstname, lastname, email, province FROM users ORDER BY id LIMIT 10 OFFSET ?',
+      [offset],
       (error, results) => {
         if (error) {
           console.log(error);
-          res.status(500).json({status: 'error'});
+          res.status(500).json({ status: 'error' });
         } else {
           res.status(200).json(results);
         }
       }
     );
   });
+  
 
   router.put('/users/:id', function (req, res, next) {
     db.query(

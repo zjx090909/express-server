@@ -42,6 +42,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Credentials of database
+.env
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
