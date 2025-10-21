@@ -13,7 +13,13 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-connection.connect();
+connection.connect(err => {
+  if (err) {
+    console.error('❌ MySQL connection failed:', err);
+    return;
+  }
+  console.log('✅ MySQL connected successfully!');
+});
 
 const port = process.env.PORT || 8080;
 
